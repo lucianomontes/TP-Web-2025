@@ -41,7 +41,7 @@ services:
       - ./tests:/tests:ro
     command: ["/bin/sh","-c","apk add --no-cache curl jq bash && bash /tests/wait-for-api.sh http://api:8081/games && bash /tests/runtest.sh"]
   database:
-    image: postgres
+    image: postgres:15
     container_name: db-postgres
     environment:
     - POSTGRES_DB=${POSTGRES_DB}
