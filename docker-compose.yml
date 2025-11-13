@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  web:
+    build: ./tp-web
+    image: golang-web
+    container_name: go-web
+    ports:
+      - "8080:8080"
+    depends_on:
+      apitests:
+        condition: service_completed_successfully
+    restart: unless-stopped
+  api:
+    build:
+      context: .
+      dockerfile: tp-web-logica/dockerfile
+    image: golang-api
+    container_name: go-api
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_SSL_MODE=${DB_SSL_MODE}
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: on-failure
+
+  apitests:
+    image: alpine:3.20
+    container_name: api-tests
+    depends_on:
+      api:
+        condition: service_started
+    volumes:
+      - ./tests:/tests:ro
+    command: ["/bin/sh","-c","apk add --no-cache curl jq bash && bash /tests/wait-for-api.sh http://api:8081/games && bash /tests/runtest.sh"]
+  database:
+    image: postgres
+    container_name: db-postgres
+    environment:
+    - POSTGRES_DB=${POSTGRES_DB}
+    - POSTGRES_USER=${POSTGRES_USER}
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+    - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+volumes:
+  dbdata:

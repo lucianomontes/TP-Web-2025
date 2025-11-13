@@ -1,0 +1,17 @@
+Cada elemento (Juego) tendrá la siguiente información:
+
+titulo: nombre del videojuego
+descripcion: sinapsis del juego
+categoria: accion/aventura/rol/etc
+fecha: fecha de lanzamiento
+estado: none/deseado/comprado
+
+
+// explicar dominio aplicacion a desarrollar
+
+
+CREATE DATABASE some-psqldb;
+CREATE USER user WITH PASSWORD 'admin';
+GRANT ALL PRIVILEGES ON DATABASE some-psqldb TO user;
+\c some-psqldb
+GRANT ALL ON SCHEMA public TO user;
