@@ -1,4 +1,4 @@
-module tp_web_datos
+module tp-web
 
 go 1.22.2
 

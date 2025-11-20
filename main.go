@@ -1,10 +1,16 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	db_connect "tp-web/db"
+	datos "tp-web/db/sqlc"
 )
+
+var queries *datos.Queries
+var ctx context.Context
 
 func main() {
 
@@ -15,6 +21,15 @@ func main() {
 			http.Error(w, "Error al cargar la pagina", http.StatusInternalServerError)
 			return
 		}
+
+		games, err := queries.ListGames(ctx)
+		if err != nil {
+			log.Printf("Error en la capa de datos al listar todos los juegos: %v", err)
+			http.Error(w, "Error inesperado", http.StatusInternalServerError)
+			return
+		}
+		log.Printf("Juegos recuperados: %v", len(games))
+
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		w.Write(data)
 
@@ -40,6 +55,17 @@ func main() {
 		w.Header().Set("Content-Type", "application/javascript; charset=utf-8")
 		w.Write(data)
 	})
+
+	// Conexión a la base de datos
+	db, err := db_connect.InitDb()
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+	log.Println("Server connected to database successfully.")
+	defer db.Close()
+
+	queries = datos.New(db)
+	ctx = context.Background()
 
 	// Iniciar servidor en el puerto 8080
 	log.Println("Presentación servida en http://localhost:8080")

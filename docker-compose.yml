@@ -2,23 +2,11 @@ version: '3'
 
 services:
   web:
-    build: ./tp-web
+    build: .
     image: golang-web
     container_name: go-web
     ports:
       - "8080:8080"
-    depends_on:
-      apitests:
-        condition: service_completed_successfully
-    restart: unless-stopped
-  api:
-    build:
-      context: .
-      dockerfile: tp-web-logica/dockerfile
-    image: golang-api
-    container_name: go-api
-    ports:
-      - "8081:8081"
     environment:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
@@ -30,16 +18,6 @@ services:
       database:
         condition: service_healthy
     restart: on-failure
-
-  apitests:
-    image: alpine:3.20
-    container_name: api-tests
-    depends_on:
-      api:
-        condition: service_started
-    volumes:
-      - ./tests:/tests:ro
-    command: ["/bin/sh","-c","apk add --no-cache curl jq bash && bash /tests/wait-for-api.sh http://api:8081/games && bash /tests/runtest.sh"]
   database:
     image: postgres:15
     container_name: db-postgres
