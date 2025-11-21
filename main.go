@@ -62,7 +62,7 @@ func main() {
 		description := r.FormValue("description")
 		category := r.FormValue("category")
 		state := r.FormValue("state")
-		image := r.FormValue("image")
+		image := "img/" + r.FormValue("title") + ".jpg"
 		releaseStr := r.FormValue("release_date")
 
 		var releaseDate time.Time
