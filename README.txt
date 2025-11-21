@@ -9,11 +9,6 @@ docker compose up --build -d
     -descargar imagenes si es necesario
     -levantar servicios (web y database)
     -correr script sql crear usuario con permisos y precargar la db
-    -correr test api
-
-    
--Para ver logs de las pruebas podemos hacerlo con (opcional):
-
 
 -Los logs se pueden ver con:
 
@@ -23,8 +18,3 @@ docker compose logs database
 ----------------------------------------------------------------------------------------------------------
 2. Acceder a la web en el siguiente link:
 http://localhost:8080
-
-----------------------------------------------------------------------------------------------------------
-3. Acceder a la api en el siguiente link:
-http://localhost:8081/games
------------------------------------------------------------------------------------------------------------
