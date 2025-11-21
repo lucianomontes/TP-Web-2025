@@ -7,19 +7,17 @@ docker compose up --build -d
 
 -El comando debería:
     -descargar imagenes si es necesario
-    -levantar servicios (web, api y database)
+    -levantar servicios (web y database)
     -correr script sql crear usuario con permisos y precargar la db
     -correr test api
 
     
 -Para ver logs de las pruebas podemos hacerlo con (opcional):
 
-docker compose logs apitests
 
--Los demas logs se pueden ver con:
+-Los logs se pueden ver con:
 
 docker compose logs web
-docker compose logs api
 docker compose logs database
 
 ----------------------------------------------------------------------------------------------------------

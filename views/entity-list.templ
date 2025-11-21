@@ -1,0 +1,23 @@
+package views
+import
+    gameList "tp-web/db/sqlc"
+
+templ entityList(games []gameList.ListGamesRow) {
+    <section class="games-section">
+      if len(games) == 0 {
+        <p class="empty">No hay juegos registrados.</p>
+      } else {
+      <ul id="gamesList" class="games-list">
+        for _, game := range games  {
+          <li class="game-item">
+            <h3>{game.Titulo}</h3>
+            <p>{game.Descripcion}</p>
+            <p><strong>Categoría:</strong> {game.Categoria}</p>
+            <p><strong>Fecha:</strong> {game.Fecha}</p>
+            <p><strong>Estado:</strong> {game.Estado}</p>
+          </li>
+        }
+      </ul>
+    }
+    </section>
+}

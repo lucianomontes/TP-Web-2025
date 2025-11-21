@@ -1,0 +1,14 @@
+package views
+
+import 
+    datos "tp-web/db/sqlc"
+
+templ IndexPage(title string, games []datos.ListGamesRow) {
+    
+    @Layout(entityList(games)) 
+    
+    @Layout(entityForm()) 
+
+    
+
+}
