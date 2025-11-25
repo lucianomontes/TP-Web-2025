@@ -107,8 +107,6 @@ func main() {
 			return
 		}
 
-		// Si no es HTMX, redirigir a la página principal
-		http.Redirect(w, r, "/", http.StatusSeeOther)
 	})
 
 	// Handler para DELETE /games/{id}
