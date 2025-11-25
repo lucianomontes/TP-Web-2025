@@ -2,10 +2,13 @@ package main
 
 import (
 	"context"
-	"net/http"
-	"time"
-
+	"database/sql"
+	"errors"
 	"log"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
 	db_connect "tp-web/db"
 	datos "tp-web/db/sqlc"
 	views "tp-web/views"
@@ -62,7 +65,8 @@ func main() {
 		description := r.FormValue("description")
 		category := r.FormValue("category")
 		state := r.FormValue("state")
-		image := "img/" + r.FormValue("title") + ".jpg"
+		// usar imagen por defecto para todos los juegos (no viene del form)
+		image := "img/default.jpg"
 		releaseStr := r.FormValue("release_date")
 
 		var releaseDate time.Time
@@ -90,7 +94,58 @@ func main() {
 			return
 		}
 
+		if r.Header.Get("HX-Request") == "true" { // If it's an HTMX request, only render the table
+
+			games, err := queries.ListGames(ctx)
+			if err != nil {
+				log.Printf("Error en la capa de datos al listar todos los juegos: %v", err)
+				http.Error(w, "Error inesperado", http.StatusInternalServerError)
+				return
+			}
+
+			views.EntityList(games).Render(r.Context(), w)
+			return
+		}
+
+		// Si no es HTMX, redirigir a la página principal
 		http.Redirect(w, r, "/", http.StatusSeeOther)
+	})
+
+	// Handler para DELETE /games/{id}
+	http.HandleFunc("/games/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodDelete {
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+		// Obtener el id de la URL "/games/{id}"
+		idStr := strings.TrimPrefix(r.URL.Path, "/games/")
+		if idStr == "" {
+			http.Error(w, "id no encontrada", http.StatusBadRequest)
+			return
+		}
+		println(idStr)
+		id, err := strconv.ParseInt(idStr, 10, 64)
+		println(id)
+		if err != nil {
+			http.Error(w, "id inválida", http.StatusBadRequest)
+			return
+		}
+		// Ejecutar delete usando r.Context()
+		if _, err := queries.DeleteGame(r.Context(), int32(id)); err != nil {
+			log.Printf("Error al eliminar juego id=%v: %v", id, err)
+			if errors.Is(err, sql.ErrNoRows) {
+				http.Error(w, "Game Not Found", http.StatusNotFound)
+				return
+			}
+			http.Error(w, "Error inesperado", http.StatusInternalServerError)
+			return
+		}
+		// Para peticiones HTMX devolvemos 200 OK con cuerpo vacío (HTMX removerá el target)
+		if r.Header.Get("HX-Request") == "true" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 	})
 
 	// Iniciar servidor en el puerto 8080

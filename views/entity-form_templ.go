@@ -8,7 +8,7 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func entityForm() templ.Component {
+func EntityForm() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +29,7 @@ func entityForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"form-section\"><h2 style=\"text-align: center;\">Agregar Nuevo Juego</h2><form id=\"createGameForm\" class=\"game-form\" method=\"POST\" action=\"/games\"><input type=\"text\" id=\"gameTitle\" name=\"title\" placeholder=\"Título\" required> <input type=\"text\" id=\"gameDescription\" name=\"description\" placeholder=\"Descripción\" required> <input type=\"text\" id=\"gameCategory\" name=\"category\" placeholder=\"Categoría\" required> <input type=\"date\" id=\"gameDate\" name=\"release_date\" placeholder=\"Fecha de salida\" required> <select id=\"gameState\" name=\"state\" required><option value=\"\">-- Seleccioná un estado --</option> <option value=\"none\">None</option> <option value=\"deseado\">Deseado</option> <option value=\"comprado\">Completado</option></select> <button type=\"submit\" class=\"btn-primary\">Agregar Juego</button></form></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<section class=\"form-section\"><h2 style=\"text-align: center;\">Agregar Nuevo Juego</h2><form id=\"createGameForm\" class=\"game-form\" method=\"POST\" action=\"/games\" hx-post=\"/games\" hx-target=\"#gamesList\" hx-swap=\"outerHTML\"><input type=\"text\" id=\"gameTitle\" name=\"title\" placeholder=\"Título\" required> <input type=\"text\" id=\"gameDescription\" name=\"description\" placeholder=\"Descripción\" required> <input type=\"text\" id=\"gameCategory\" name=\"category\" placeholder=\"Categoría\" required> <input type=\"date\" id=\"gameDate\" name=\"release_date\" placeholder=\"Fecha de salida\" required> <select id=\"gameState\" name=\"state\" required><option value=\"\">-- Seleccioná un estado --</option> <option value=\"none\">None</option> <option value=\"deseado\">Deseado</option> <option value=\"comprado\">Completado</option></select> <button type=\"submit\" class=\"btn-primary\">Agregar Juego</button></form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,8 +1,8 @@
 package views
- templ entityForm() {
+ templ EntityForm() {
     <section class="form-section">
       <h2 style="text-align: center;">Agregar Nuevo Juego</h2>
-      <form id="createGameForm" class="game-form" method="POST" action="/games">
+      <form id="createGameForm" class="game-form" method="POST"  action="/games" hx-post="/games" hx-target="#gamesList" hx-swap="outerHTML">
         <input type="text" id="gameTitle" name="title" placeholder="Título" required>
         <input type="text" id="gameDescription" name="description" placeholder="Descripción" required>
         <input type="text" id="gameCategory" name="category" placeholder="Categoría" required>

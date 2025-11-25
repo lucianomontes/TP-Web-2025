@@ -1,8 +1,9 @@
 package views
-import
+import(
     gameList "tp-web/db/sqlc"
-
-templ entityList(games []gameList.ListGamesRow) {
+    "fmt"
+)
+templ EntityList(games []gameList.ListGamesRow) {
     <section class="games-section">
       if len(games) == 0 {
         <p class="empty">No hay juegos registrados.</p>
@@ -15,6 +16,8 @@ templ entityList(games []gameList.ListGamesRow) {
             <p><strong>Categoría:</strong> {game.Categoria}</p>
             <p><strong>Fecha:</strong> {game.Fecha}</p>
             <p><strong>Estado:</strong> {game.Estado}</p>
+            <img src="{game.Imagen}" alt="{game.Titulo} image" />
+            <td> <button type="button" class="btn-primary" hx-delete={"/games/" + fmt.Sprint(game.ID)} hx-target="closest li" hx-swap="outerHTML" hx-confirm="¿Estás seguro de que deseas eliminar este juego?">Eliminar Juego</button>  </td>        
           </li>
         }
       </ul>
