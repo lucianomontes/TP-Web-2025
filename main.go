@@ -66,7 +66,7 @@ func main() {
 		category := r.FormValue("category")
 		state := r.FormValue("state")
 		// usar imagen por defecto para todos los juegos (no viene del form)
-		image := "img/default.jpg"
+		image := "img/" + title + ".jpg"
 		releaseStr := r.FormValue("release_date")
 
 		var releaseDate time.Time
@@ -145,6 +145,13 @@ func main() {
 		}
 
 	})
+
+	// Handler para servir archivos estáticos de la carpeta "img"
+	http.Handle("/img/",
+		http.StripPrefix("/img/",
+			http.FileServer(http.Dir("img")),
+		),
+	)
 
 	// Iniciar servidor en el puerto 8080
 	log.Println("Presentación servida en http://localhost:8080")

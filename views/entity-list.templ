@@ -16,7 +16,7 @@ templ EntityList(games []gameList.ListGamesRow) {
             <p><strong>Categoría:</strong> {game.Categoria}</p>
             <p><strong>Fecha:</strong> {game.Fecha}</p>
             <p><strong>Estado:</strong> {game.Estado}</p>
-            <img src="{game.Imagen}" alt="{game.Titulo} image" />
+            <img src={ game.Imagen } alt={ game.Titulo + " image" } onerror="this.onerror=null; this.src='img/default.png';" />
             <td> <button type="button" class="btn-primary" hx-delete={"/games/" + fmt.Sprint(game.ID)} hx-target="closest li" hx-swap="outerHTML" hx-confirm="¿Estás seguro de que deseas eliminar este juego?">Eliminar Juego</button>  </td>        
           </li>
         }
